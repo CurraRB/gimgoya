@@ -25,6 +25,16 @@ Aplicación web de gestión de reservas de clases para un gimnasio, desarrollada
 
 ---
 
+## Despliegue en producción
+
+La aplicación está desplegada en **Railway** y accesible públicamente en:
+
+**https://gimgoya-production.up.railway.app**
+
+Railway es una plataforma de hosting en la nube que ejecuta la aplicación con PHP 8.3 y una base de datos MySQL independiente. Cualquier cambio publicado en la rama `main` del repositorio se despliega automáticamente.
+
+---
+
 ## Tecnología utilizada
 
 - **Laravel 13 / PHP 8.3** — framework MVC para el backend y generación de vistas
@@ -199,43 +209,47 @@ Las capturas están en la carpeta [`docs/capturas/`](docs/capturas/).
 
 ### Portada
 
-![Portada](docs/capturas/00_portada.png)
+![Portada](docs/capturas/00_portada.jpg)
 <!-- CAPTURA: portada con el nombre GimGoya, descripción y botón Acceder -->
 
 ### Login
 
-![Login](docs/capturas/01_login.png)
+![Login](docs/capturas/01_login.jpg)
 <!-- CAPTURA: pantalla de inicio de sesión con el formulario centrado -->
 
 ### Panel del monitor — listado de clases
 
-![Panel monitor](docs/capturas/02_monitor_panel.png)
+![Panel monitor](docs/capturas/02_monitor_panel.jpg)
 <!-- CAPTURA: panel del monitor con la tabla de clases, columnas Tipo/Monitor/Fecha/Horario/Aforo/Inscritos/Acciones -->
 
 ### Monitor — crear clase
 
-![Crear clase](docs/capturas/03_monitor_crear_clase.png)
+![Crear clase](docs/capturas/03_monitor_crear_clase.jpg)
 <!-- CAPTURA: formulario de nueva clase con los campos tipo, fecha, hora inicio/fin y aforo -->
 
 ### Monitor — inscritos en una clase
 
-![Inscritos monitor](docs/capturas/04_monitor_inscritos.png)
+![Inscritos monitor](docs/capturas/04_monitor_inscritos.jpg)
 <!-- CAPTURA: tabla con los socios inscritos (nombre, usuario, email) -->
 
 ### Socio — clases disponibles
 
-![Clases socio](docs/capturas/05_socio_clases.png)
+![Clases socio](docs/capturas/05_socio_clases.jpg)
 <!-- CAPTURA: tabla de clases con badge verde/rojo de plazas y botón Reservar -->
 
 ### Socio — mis reservas
 
-![Mis reservas](docs/capturas/06_socio_mis_reservas.png)
+![Mis reservas](docs/capturas/06_socio_mis_reservas.jpg)
 <!-- CAPTURA: tabla de reservas activas del socio con botón Cancelar -->
 
 ### Socio — inscritos en una clase
 
-![Inscritos socio](docs/capturas/07_socio_inscritos.png)
+![Inscritos socio](docs/capturas/07_socio_inscritos.jpg)
 <!-- CAPTURA: tabla de inscritos vista desde el rol socio (solo nombre) -->
+
+### Base de datos
+
+![Base de datos](docs/capturas/08_base_de_datos.jpg)
 
 ---
 
@@ -245,12 +259,16 @@ Requisitos previos: **PHP 8.3+**, **Composer**, **MySQL 8+** en ejecución.
 
 ---
 
-**1. Clonar o copiar el proyecto**
+**1. Obtener el proyecto**
+
+**Opción A — Desde el zip:**
+Descomprime el zip en la ubicación deseada y abre una terminal dentro de la carpeta del proyecto. El fichero `.env` ya está incluido con la configuración lista.
+
+**Opción B — Desde Git:**
 ```bash
-git clone https://github.com/usuario/gimnasio.git
-cd gimnasio
+git clone https://github.com/CurraRB/gimgoya.git
+cd gimgoya
 ```
-Si se copia desde un pen drive, entrar en la carpeta del proyecto desde la terminal.
 
 ---
 
@@ -258,11 +276,17 @@ Si se copia desde un pen drive, entrar en la carpeta del proyecto desde la termi
 ```bash
 composer install
 ```
-Descarga todas las librerías definidas en `composer.json` y las coloca en `vendor/`. Esta carpeta no se incluye en el repositorio, por lo que este paso es obligatorio en cualquier instalación nueva.
+Descarga todas las librerías definidas en `composer.json` y las coloca en `vendor/`. Esta carpeta no se incluye en el zip ni en el repositorio, por lo que este paso es obligatorio en cualquier instalación nueva.
+
+Si la instalación falla por versión de PHP, usar:
+```bash
+composer install --ignore-platform-reqs
+```
 
 ---
 
-**3. Crear el fichero de entorno**
+**3. Crear el fichero de entorno** ⚠️ Solo necesario si has hecho git clone
+
 ```bash
 cp .env.example .env
 ```
@@ -283,7 +307,8 @@ Cambia `DB_USERNAME` y `DB_PASSWORD` si tu MySQL tiene credenciales distintas.
 
 ---
 
-**4. Generar la clave de aplicación**
+**4. Generar la clave de aplicación** ⚠️ Solo necesario si has hecho git clone
+
 ```bash
 php artisan key:generate
 ```
@@ -313,7 +338,7 @@ php artisan db:seed
 
 **6. Opción B — Restaurar el dump incluido**
 
-Si se prefiere restaurar directamente la base de datos con estructura y datos:
+Si se prefiere restaurar directamente la base de datos con estructura y datos, abre una ventana de **símbolo del sistema (cmd)** y ejecuta:
 ```bash
 mysql -u root gimnasio < gimnasio.sql
 ```
@@ -359,14 +384,14 @@ php artisan about --only=environment
 
 ### Base de datos
 
-El fichero `gimnasio.sql` incluido en el repositorio contiene toda la estructura y los datos de prueba. Para restaurarlo:
+El fichero `gimnasio.sql` incluido en el repositorio y en el zip contiene toda la estructura y los datos de prueba. Para restaurarlo, abre una ventana de **símbolo del sistema (cmd)** y ejecuta:
 
 ```bash
 mysql -u root -e "CREATE DATABASE gimnasio;"
 mysql -u root gimnasio < gimnasio.sql
 ```
 
-Para generar un nuevo dump:
+Para generar un nuevo dump, desde **cmd**:
 
 ```bash
 mysqldump -u root gimnasio > gimnasio.sql
